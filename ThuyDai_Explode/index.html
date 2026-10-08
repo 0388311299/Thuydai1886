@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Thủy Đài 1886 · Bung Cấu Kiện</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23d79a3c'/%3E%3Cpath d='M8 22h16M10 22V12h12v10M12 12V8h8v4' stroke='%231a1409' stroke-width='2' fill='none'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="css/style.css">
+<script type="importmap">
+{ "imports": {
+  "three": "./vendor/three/three.module.js",
+  "three/addons/": "./vendor/three/jsm/"
+} }
+</script>
+</head>
+<body>
+
+<div id="stage">
+  <canvas id="view"></canvas>
+  <div id="tip" hidden></div>
+  <div id="pin" hidden><span></span></div>
+
+  <div id="loading">
+    <div class="ring"></div>
+    <p>Đang nạp mô hình thủy đài…<b id="pct">0%</b></p>
+  </div>
+</div>
+
+<header id="bar">
+  <div class="brand">
+    <span class="kicker">01 Công trường Quốc tế · SAWACO</span>
+    <h1>Thủy đài 1886 — bung cấu kiện</h1>
+  </div>
+  <div class="tools">
+    <label class="slider">
+      <span>Bung <b id="exVal">0%</b></span>
+      <input id="ex" type="range" min="0" max="100" value="0">
+    </label>
+    <button id="btnPlay" class="btn primary">Bung ra</button>
+    <button id="btnXray" class="btn">Xuyên thấu</button>
+    <button id="btnSpin" class="btn">Tự xoay</button>
+    <button id="btnReset" class="btn">Đặt lại</button>
+    <button id="btnPanel" class="btn only-narrow">Danh mục</button>
+  </div>
+</header>
+
+<aside id="list">
+  <div class="search"><input id="q" type="search" placeholder="Tìm cấu kiện…" autocomplete="off"></div>
+  <div id="groups"></div>
+  <p class="foot">56 cấu kiện · số đo đọc trực tiếp từ mô hình Blender</p>
+</aside>
+
+<section id="info" class="empty">
+  <button id="infoClose" class="x" aria-label="Đóng">×</button>
+  <div id="infoBody">
+    <p class="hint">Nhấn vào một cấu kiện trên mô hình — hoặc chọn trong danh mục — để xem niên đại, vật liệu, kích thước và khối lượng.</p>
+  </div>
+</section>
+
+<script type="module" src="js/viewer.js"></script>
+</body>
+</html>
