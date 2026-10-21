@@ -1,0 +1,33 @@
+{
+  "upper_bounds": {
+    "min_mm": [
+      -197.0,
+      -228.0,
+      0.0
+    ],
+    "max_mm": [
+      197.0,
+      164.0,
+      750.0
+    ]
+  },
+  "lower_bounds": {
+    "min_mm": [
+      -150.0,
+      -193.0,
+      -800.0
+    ],
+    "max_mm": [
+      150.0,
+      150.0,
+      0.0
+    ]
+  },
+  "original_scene_objects": [
+    "Cube",
+    "Light",
+    "Camera"
+  ],
+  "active_scene": "TTV_DN100_01_Tru_noi",
+  "file": "G:\\My Drive\\Sang kien Webgame\\Tru_Thao_Tin_Vu\\Tru_Thao_Tin_Vu_DN100.blend"
+}

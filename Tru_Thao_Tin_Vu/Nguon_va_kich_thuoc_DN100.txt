@@ -1,0 +1,25 @@
+TRỤ NƯỚC CHỮA CHÁY THẢO TÍN VŨ - DN100
+
+Hai scene: 01_Tru_noi và 02_Toan_bo. Scene gốc được giữ nguyên.
+Đơn vị hình học nội bộ: m; số đo trong bảng/ghi chú: mm. Mặt đất z=0.
+Catalogue hình trang 4-5: h=490; h1=750; h2min=800; h2max=1010;
+Hmin=1550; Hmax=1760 mm. Mô hình lắp ở cấu hình ngắn nhất.
+h được đặt tại tâm hai họng bên. DN100 là cỡ danh nghĩa đầu vào.
+
+LƯU Ý NGUỒN:
+Website và PDF 4 trang cũ ghi chiều cao phần nổi 620 mm, khác catalogue
+hình trang 4-5 ghi 750 mm. Mô hình này chọn biến thể catalogue 750 mm.
+D328 đáy là số tham chiếu từ website, chưa có bản vẽ xác nhận tương thích
+với biến thể 750 mm. Không được coi toàn bộ mô hình đã xác nhận chế tạo.
+
+CÁC CHI TIẾT ƯỚC LƯỢNG THEO ẢNH:
+Biên dạng thân/nắp, đường kính thân, họng ra, vị trí họng lớn,
+hoa văn, tay giữ, bulông, bích đầu vào/lỗ bulông, ren và chân co.
+Không dựng cơ cấu van bên trong. Không có ren/lắp ghép chức năng đã xác nhận.
+Mô hình phục vụ hình dung, trình bày và chỉnh sửa hình học.
+
+Nguồn: https://thaotinvu.com/tru-nuoc-chua-chay
+Catalogue hình: https://thaotinvu.com/upload/images/4%20tru%20dung.jpg
+https://thaotinvu.com/upload/images/5%20tru%20dung%202%20copy.jpg
+Đối chiếu cũ: https://thaotinvu.com/upload/news/835923016029.pdf
+Ngày truy cập: 16/10/2026.
