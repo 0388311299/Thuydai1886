@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Bảo tàng số · Thủy đài 1886</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23d79a3c'/%3E%3Cpath d='M8 22h16M10 22V12h12v10M12 12V8h8v4' stroke='%231a1409' stroke-width='2' fill='none'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="css/museum.css">
+<script type="importmap">
+{ "imports": {
+  "three": "../ThuyDai_Explode/vendor/three/three.module.js",
+  "three/addons/": "../ThuyDai_Explode/vendor/three/jsm/"
+} }
+</script>
+</head>
+<body>
+
+<canvas id="view"></canvas>
+
+<!-- ------------------------------------------------- lớp nạp + cổng vào -->
+<div id="loading">
+  <div class="ring"></div>
+  <p>Đang dựng bảo tàng…</p>
+</div>
+
+<div id="gate">
+  <div class="card">
+    <span class="kicker">01 Công trường Quốc tế · SAWACO</span>
+    <h1 id="gateTitle">Bảo tàng số trong lòng thủy đài 1886</h1>
+    <p id="gateSub">Vật phẩm cấp nước qua các thời kỳ · năm gian trưng bày</p>
+    <ul class="keys">
+      <li><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> đi lại</li>
+      <li><kbd>Chuột</kbd> nhìn quanh</li>
+      <li><kbd>Shift</kbd> đi nhanh</li>
+      <li><kbd>E</kbd> xem vật phẩm</li>
+      <li><kbd>M</kbd> sơ đồ</li>
+      <li><kbd>Esc</kbd> tạm dừng</li>
+    </ul>
+    <button class="enter">Nhấp để vào bảo tàng</button>
+    <p class="small">Trên điện thoại: kéo nửa trái để đi, kéo nửa phải để nhìn.</p>
+  </div>
+</div>
+
+<!-- --------------------------------------------------------------- HUD -->
+<div id="hud">
+  <div id="where"></div>
+  <button id="btnMap" class="chip">Sơ đồ · M</button>
+  <div id="cross"></div>
+  <div id="prompt" hidden></div>
+  <div id="help">W A S D đi · chuột nhìn · <kbd>E</kbd> xem vật phẩm · <kbd>M</kbd> sơ đồ</div>
+  <nav id="map" hidden></nav>
+</div>
+
+<!-- ----------------------------------------------------- xem vật phẩm -->
+<section id="insp" hidden>
+  <header id="inspTop">
+    <button id="inspBack">← Trở lại gian trưng bày</button>
+    <div class="ttl">
+      <span id="inspGian"></span>
+      <h2 id="inspName"></h2>
+      <span id="inspAlt"></span>
+    </div>
+    <span id="inspDraft" class="badge">Dữ liệu tạm</span>
+  </header>
+
+  <aside id="inspComps"></aside>
+  <aside id="inspInfo"></aside>
+
+  <footer id="inspTools">
+    <label class="slider">
+      <span>Tách cấu kiện <b id="exVal">0%</b></span>
+      <input id="ex" type="range" min="0" max="100" value="0">
+    </label>
+    <button id="btnExplode" class="btn primary">Tách / gộp</button>
+    <button id="btnSpin" class="btn on">Xoay chậm</button>
+    <button id="btnResetView" class="btn">Đặt lại</button>
+    <span class="tiny">Kéo để xoay · con lăn để phóng · bấm vào cấu kiện để đọc</span>
+  </footer>
+</section>
+
+<script type="module" src="js/museum.js"></script>
+</body>
+</html>
