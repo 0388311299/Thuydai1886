@@ -1,0 +1,34 @@
+{
+  "estimated_mm": {
+    "body_height": 1100,
+    "body_top_diameter": 450,
+    "body_bottom_diameter": 320,
+    "sheet": 1.5,
+    "basin_depth": 75,
+    "tap_height": 85
+  },
+  "pdf_mm": {
+    "rc_slab": [
+      1000,
+      1000,
+      150
+    ],
+    "granite_top": [
+      1040,
+      1080,
+      20
+    ],
+    "mortar_thickness": 20,
+    "sleeve_diameter": 120,
+    "anchor_thread": 10,
+    "rebar_diameter": 10,
+    "rebar_length": 950,
+    "supply_OD": 27,
+    "drain_OD": 42
+  },
+  "notes": [
+    "No external main network modeled: TH12 DN100/4m, TH13 D63/4m, TH14 DN300/10m need site choice.",
+    "Tap and concealed routing are indicative; manufacturer and stainless grade unconfirmed.",
+    "Original Scene preserved intact."
+  ]
+}
