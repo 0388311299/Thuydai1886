@@ -67,6 +67,25 @@ function floorTexture() {
   return t;
 }
 
+/* vệt bóng tiếp đất — một ảnh dùng chung cho mọi bệ */
+let shadowTex = null;
+function contactShadow() {
+  if (!shadowTex) {
+    const cv = document.createElement('canvas'); cv.width = cv.height = 128;
+    const c = cv.getContext('2d');
+    const g = c.createRadialGradient(64, 64, 4, 64, 64, 62);
+    g.addColorStop(0, 'rgba(0,0,0,.72)');
+    g.addColorStop(0.45, 'rgba(0,0,0,.34)');
+    g.addColorStop(1, 'rgba(0,0,0,0)');
+    c.fillStyle = g; c.fillRect(0, 0, 128, 128);
+    shadowTex = new THREE.CanvasTexture(cv);
+  }
+  const m = new THREE.Mesh(new THREE.PlaneGeometry(0.86, 0.86),
+    new THREE.MeshBasicMaterial({ map: shadowTex, transparent: true, depthWrite: false, opacity: .9 }));
+  m.rotation.x = -Math.PI / 2;
+  return m;
+}
+
 /* --------------------------------------------------------------- dựng cảnh */
 export function buildMuseum() {
   const group = new THREE.Group();
@@ -332,6 +351,10 @@ function buildNiche({ group, hits, colliders, period, slot, artId, base, nrm, fa
     holder.position.copy(P(D / 2 + 0.04, 1.01));
     holder.rotation.y = face;
     g.add(holder);
+
+    const sh = contactShadow();
+    sh.position.copy(P(D / 2 + 0.04, 1.014));
+    g.add(sh);
   }
 
   /* bảng tên nghiêng trước tủ */

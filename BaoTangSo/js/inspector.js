@@ -6,6 +6,21 @@ import { buildArtifact } from './artifacts/index.js';
 
 const $ = s => document.querySelector(s);
 
+/* phông studio: sáng ở giữa, tối dần ra rìa */
+function backdrop() {
+  const cv = document.createElement('canvas');
+  cv.width = cv.height = 256;
+  const c = cv.getContext('2d');
+  const g = c.createRadialGradient(128, 104, 10, 128, 128, 190);
+  g.addColorStop(0, '#2b2721');
+  g.addColorStop(0.55, '#171410');
+  g.addColorStop(1, '#0a0908');
+  c.fillStyle = g; c.fillRect(0, 0, 256, 256);
+  const t = new THREE.CanvasTexture(cv);
+  t.colorSpace = THREE.SRGBColorSpace;
+  return t;
+}
+
 export class Inspector {
   constructor(renderer, env, { onClose } = {}) {
     this.renderer = renderer;
@@ -13,15 +28,21 @@ export class Inspector {
     this.active = false;
 
     this.scene = new THREE.Scene();
-    this.scene.background = new THREE.Color(0x0e0c0a);
+    this.scene.background = backdrop();
     if (env) this.scene.environment = env;
 
     this.cam = new THREE.PerspectiveCamera(38, 1, 0.01, 60);
 
     this.scene.add(new THREE.HemisphereLight(0xbcd0ff, 0x3a3228, 0.95));
     const key = new THREE.DirectionalLight(0xfff0d8, 3.4); key.position.set(2.4, 3.4, 2.2);
+    key.castShadow = true;
+    key.shadow.mapSize.set(1024, 1024);
+    key.shadow.bias = -0.0009;
+    key.shadow.normalBias = 0.02;
+    this.key = key;
     const fill = new THREE.DirectionalLight(0xbcd2ff, 1.2); fill.position.set(-2.6, 1.2, -1.6);
     const rim = new THREE.DirectionalLight(0xffd9a0, 1.6); rim.position.set(0.4, 1.4, -3.2);
+    this.scene.add(key.target);
     const bounce = new THREE.DirectionalLight(0xffe3c0, 0.5); bounce.position.set(0, -2.4, 1.2);
     this.scene.add(bounce);
     this.scene.add(key, fill, rim);
@@ -30,6 +51,7 @@ export class Inspector {
     const disc = new THREE.Mesh(new THREE.CircleGeometry(1, 56),
       new THREE.MeshStandardMaterial({ color: 0x1b1814, roughness: .7, metalness: .2, transparent: true }));
     disc.rotation.x = -Math.PI / 2;
+    disc.receiveShadow = true;
     this.scene.add(disc);
     this.disc = disc;
 
@@ -68,6 +90,7 @@ export class Inspector {
     const d = Math.max(size.x, size.y, size.z);
 
     model.position.sub(ctr);                 // tâm vật phẩm về gốc bàn xoay
+    model.traverse(o => { if (o.isMesh) { o.castShadow = true; o.receiveShadow = true; } });
     this.pivot.add(model);
     this.model = model;
     this.pivot.position.set(0, size.y * 0.58, 0);
@@ -182,6 +205,18 @@ export class Inspector {
     /* đưa vật phẩm vào giữa dải trống */
     const offFrac = ((top + bot) / 2 - H / 2) / H;
     this.yOff = -offFrac * 2 * this.dist0 * Math.tan(half);
+
+    /* khung chiếu bóng bám theo cỡ vật phẩm hiện tại */
+    if (this.key) {
+      const sc = this.key.shadow.camera, e = R * 1.5;
+      sc.left = -e; sc.right = e; sc.top = e; sc.bottom = -e;
+      sc.near = 0.1; sc.far = R * 12 + 6;
+      sc.updateProjectionMatrix();
+      this.key.position.set(2.4, 3.4, 2.2).normalize().multiplyScalar(R * 4 + 1.2)
+        .add(new THREE.Vector3(0, this.pivot.position.y, 0));
+      this.key.target.position.set(0, this.pivot.position.y, 0);
+      this.key.target.updateMatrixWorld();
+    }
   }
 
   render() { this.renderer.render(this.scene, this.cam); }

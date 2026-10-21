@@ -85,6 +85,32 @@ BaoTangSo/
 Muốn thêm/bớt thời kỳ thì thêm phần tử vào `PERIODS` — số gian, số cửa và vách tiền sảnh
 tự chia lại theo số thời kỳ.
 
+## Chất liệu và độ thật của mô hình
+
+Hiện vật đang được dựng bằng khối cơ bản nhưng đã có lớp vật liệu thật sự:
+
+- `js/artifacts/materials.js` sinh thẳng bằng canvas ba bản đồ cho mỗi chất liệu —
+  **màu** (gỉ, tróc sơn, gỉ đồng), **độ nhám + độ kim loại** (kênh lục và lam của
+  cùng một ảnh), **pháp tuyến** (rỗ đúc, xước, hạt đá). Không cần tệp ảnh ngoài.
+- Mật độ hoạ tiết tính theo kích thước thật: `TILE` trong `kit.js` là bề rộng một ô
+  hoạ tiết (0,22 m). Nhờ vậy khối nhỏ không bị nén hoạ tiết, khối tròn xoay không nổi
+  vân như gỗ.
+- Bóng đổ thật trong chế độ xem vật phẩm (đèn chính đổ bóng, khung chiếu bám theo cỡ
+  vật phẩm), cộng vệt bóng tiếp đất trong tủ trưng bày.
+
+Muốn thật hơn nữa thì theo thứ tự hiệu quả giảm dần:
+
+1. **Thay bằng mô hình thật**: quét ảnh hiện vật (50–120 tấm quanh vật, ánh sáng đều,
+   dùng RealityCapture / Meshroom / Polycam) hoặc dựng trong Blender, nung (bake)
+   màu + nhám + pháp tuyến vào texture rồi xuất `.glb`. Giữ nguyên tên cấu kiện là
+   phần tách rời và bảng chữ chạy y nguyên.
+2. **Vát cạnh**: cạnh vuông tuyệt đối là dấu hiệu rõ nhất của hàng dựng máy. Thêm vài
+   điểm biên dạng trong `lathe(...)` hoặc vòng `ring(...)` ở chỗ giao khối.
+3. **Ảnh môi trường thật** (HDRI) thay cho `RoomEnvironment` dựng sẵn — phản chiếu
+   trên gang và đồng sẽ có hình khối thay vì loang đều.
+4. **Hậu kỳ**: bloom nhẹ và che khuất môi trường (SSAO) — cần nạp thêm
+   `EffectComposer` vào `vendor/three/jsm`.
+
 ## Còn phải làm
 
 - **Thay nội dung tạm**: hai vật phẩm hiện có mang nhãn “Dữ liệu tạm”, mô tả dựng theo
