@@ -19,6 +19,21 @@ python3 -m http.server 8777
 # rồi mở http://localhost:8777/BaoTangSo/
 ```
 
+## Chạy trên web (GitHub Pages)
+
+Repo này công khai nên bật Pages là có link bấm thẳng từ trình duyệt, không cần cài gì:
+
+**Settings → Pages → Source: “Deploy from a branch” → chọn nhánh + thư mục `/ (root)` → Save.**
+
+Sau 1–2 phút trang chạy tại `https://<tài-khoản>.github.io/Thuydai1886/`
+(ở đây là https://0388311299.github.io/Thuydai1886/). Chọn nhánh `main` thì nhớ gộp
+nhánh phát triển vào `main` trước; hoặc chọn thẳng nhánh phát triển để xem bản thử
+mà chưa gộp. File `.nojekyll` ở gốc repo để GitHub phục vụ nguyên file tĩnh.
+
+Muốn xem nhanh một nhánh bất kỳ mà không bật Pages: thay `github.com` bằng
+`raw.githack.com` trong đường dẫn tới file, ví dụ
+`https://raw.githack.com/0388311299/Thuydai1886/<nhánh>/BaoTangSo/index.html`.
+
 ## Điều khiển
 
 | | |
