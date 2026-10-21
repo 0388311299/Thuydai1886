@@ -26,6 +26,27 @@ const pmrem = new THREE.PMREMGenerator(renderer);
 const env = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
 scene.environment = env;
 
+/* Phòng chụp cho chế độ xem vật phẩm: vài tấm hắt sáng lớn để inox và đồng
+   có phản chiếu ra hình khối, thay vì xám đều như trong phòng trưng bày tối. */
+function studioScene() {
+  const s = new THREE.Scene();
+  const panel = (color, power, scale, pos) => {
+    const m = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1),
+      new THREE.MeshBasicMaterial({ color: new THREE.Color(color).multiplyScalar(power) }));
+    m.scale.set(scale[0], scale[1], scale[2]);
+    m.position.set(pos[0], pos[1], pos[2]);
+    s.add(m);
+  };
+  s.add(new THREE.Mesh(new THREE.BoxGeometry(22, 14, 22),
+    new THREE.MeshBasicMaterial({ color: 0x1e1b18, side: THREE.BackSide })));
+  panel(0xffffff, 7.0, [8, 0.2, 6], [0, 6.2, 0]);     // trần
+  panel(0xfff1e2, 5.5, [0.2, 5.5, 7], [-6.5, 2.2, 1]); // hắt trái
+  panel(0xe3ecff, 3.6, [0.2, 4.5, 6], [6.5, 2.6, -1]); // hắt phải
+  panel(0xffffff, 2.4, [6, 3.4, 0.2], [0, 2.2, 7.5]);  // hắt trước
+  return s;
+}
+const studioEnv = pmrem.fromScene(studioScene(), 0.03).texture;
+
 const camera = new THREE.PerspectiveCamera(62, 1, 0.05, 120);
 
 scene.add(new THREE.HemisphereLight(0x9fb4d8, 0x2a2219, 0.6));
@@ -44,7 +65,7 @@ const walker = new Walker(camera, canvas, { eye: GEO.EYE, bound: GEO.R_HUB + GEO
 walker.setColliders(museum.colliders);
 walker.place(0, 4.6, 0);
 
-const inspector = new Inspector(renderer, env, {
+const inspector = new Inspector(renderer, studioEnv, {
   onClose: () => {
     walker.enabled = true;
     $('#hud').hidden = false;

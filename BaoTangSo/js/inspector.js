@@ -1,7 +1,7 @@
 /* Chế độ xem vật phẩm: vật phẩm xoay chậm trên bàn xoay, kéo để xoay tay,
    thanh trượt tách rời cấu kiện, bấm vào cấu kiện để đọc vật liệu – chức năng. */
 import * as THREE from 'three';
-import { ARTIFACTS, periodOf } from './data/exhibits.js';
+import { ARTIFACTS, SRC_LABEL, periodOf } from './data/exhibits.js';
 import { buildArtifact } from './artifacts/index.js';
 
 const $ = s => document.querySelector(s);
@@ -258,7 +258,9 @@ export class Inspector {
     $('#inspGian').textContent = `Gian ${p.no} · ${p.years}`;
     $('#inspName').textContent = a.name;
     $('#inspAlt').textContent = a.nameAlt || '';
-    $('#inspDraft').hidden = !a.draft;
+    const badge = $('#inspDraft');
+    badge.hidden = !(a.badge || a.draft);
+    badge.textContent = a.badge || 'Dữ liệu tạm';
 
     const row = (k, v) => `<div class="row"><span>${k}</span><b>${v}</b></div>`;
     $('#inspInfo').innerHTML = `
@@ -292,6 +294,7 @@ export class Inspector {
       <button class="comp ${this.selected === c.id ? 'on' : ''}" data-id="${c.id}">
         <i>${String(i + 1).padStart(2, '0')}</i>
         <span><b>${c.meta.name}</b><em>${c.meta.mat || ''}</em></span>
+        ${c.meta.src === 'uoc' ? '<u title="Ước lượng theo ảnh">≈</u>' : ''}
       </button>`).join('');
     $('#inspComps').innerHTML = `
       <div class="hd">Cấu kiện <b>${this.comps.length}</b></div>
@@ -310,6 +313,7 @@ export class Inspector {
         <span class="tag">Cấu kiện đang chọn</span>
         <h3>${c.meta.name}</h3>
         <div class="row"><span>Vật liệu</span><b>${c.meta.mat || '—'}</b></div>
+        ${c.meta.src ? `<div class="row"><span>Nguồn số đo</span><b>${SRC_LABEL[c.meta.src] || c.meta.src}</b></div>` : ''}
         <h4>Chức năng</h4><p>${c.meta.func || '—'}</p>
         <h4>Ghi chú</h4><p>${c.meta.info || '—'}</p>
       </div>`;

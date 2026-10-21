@@ -185,19 +185,19 @@ const RECIPES = {
     for (let y = 0; y < SIZE; y++) for (let x = 0; x < SIZE; x++) {
       const u = x / SIZE, v = y / SIZE;
       const l = line(u * 0.08, v), b = broad(u, v);
-      const k = mix(0.9, 1.08, l) * mix(0.96, 1.04, b);
+      const k = mix(0.975, 1.025, l) * mix(0.985, 1.015, b);
       const i = (y * SIZE + x) * 4;
       ci.data[i] = tint[0] * k; ci.data[i + 1] = tint[1] * k; ci.data[i + 2] = tint[2] * k;
       ci.data[i + 3] = 255;
       ri.data[i] = 128;
-      ri.data[i + 1] = (rough + (l - 0.5) * 0.18) * 255;
+      ri.data[i + 1] = (rough + (l - 0.5) * 0.08) * 255;
       ri.data[i + 2] = 240;
       ri.data[i + 3] = 255;
       h[y * SIZE + x] = l * 0.3;
     }
     col.getContext('2d').putImageData(ci, 0, 0);
     rm.getContext('2d').putImageData(ri, 0, 0);
-    return { map: col, rm, normal: normalMapOf(h, 9), repeat: 1, normalScale: 0.22 };
+    return { map: col, rm, normal: normalMapOf(h, 6), repeat: 1, normalScale: 0.12 };
   },
 
   /* đá, bê tông, cao su: hạt thô, không kim loại */

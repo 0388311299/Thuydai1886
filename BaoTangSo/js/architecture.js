@@ -86,6 +86,22 @@ function contactShadow() {
   return m;
 }
 
+/* nhãn nhỏ đánh dấu cốt đất trong tủ */
+function groundTag() {
+  const cv = document.createElement('canvas');
+  cv.width = 256; cv.height = 64;
+  const c = cv.getContext('2d');
+  c.clearRect(0, 0, 256, 64);
+  c.fillStyle = '#d8bd88';
+  c.font = '600 30px system-ui, sans-serif';
+  c.textBaseline = 'middle';
+  c.fillText('— CỐT ĐẤT', 6, 34);
+  const t = new THREE.CanvasTexture(cv);
+  t.colorSpace = THREE.SRGBColorSpace;
+  return new THREE.Mesh(new THREE.PlaneGeometry(0.32, 0.08),
+    new THREE.MeshBasicMaterial({ map: t, transparent: true, toneMapped: false }));
+}
+
 /* --------------------------------------------------------------- dựng cảnh */
 export function buildMuseum() {
   const group = new THREE.Group();
@@ -285,7 +301,8 @@ function buildNiche({ group, hits, colliders, period, slot, artId, base, nrm, fa
   const g = new THREE.Group();
   group.add(g);
 
-  const W = 2.1, H = 2.5, D = 0.78;
+  const onFloor = art && art.mount === 'san';     // hiện vật có cả phần móng thì đứng trên sàn tủ
+  const W = 2.1, H = 2.5, D = onFloor ? 1.34 : 0.78;
   const P = (d, y, t = 0) => new THREE.Vector3(
     base.x + n.x * d + side.x * t, y, base.z + n.z * d + side.z * t);
 
@@ -330,42 +347,67 @@ function buildNiche({ group, hits, colliders, period, slot, artId, base, nrm, fa
     return;
   }
 
-  /* bệ đặt vật phẩm */
-  const ped = new THREE.Mesh(new THREE.BoxGeometry(0.95, 0.95, 0.56), matStone);
-  ped.position.copy(P(D / 2 + 0.04, 0.475));
-  ped.rotation.y = face;
-  g.add(ped);
-  const cap = new THREE.Mesh(new THREE.BoxGeometry(1.05, 0.06, 0.64),
-    new THREE.MeshStandardMaterial({ color: 0x2b2621, roughness: .7 }));
-  cap.position.copy(P(D / 2 + 0.04, 0.98));
-  cap.rotation.y = face;
-  g.add(cap);
+  /* bệ đặt vật phẩm — chỉ dùng cho hiện vật nhỏ, đặt trên bệ */
+  let standY = 0.015;
+  if (!onFloor) {
+    const ped = new THREE.Mesh(new THREE.BoxGeometry(0.95, 0.95, 0.56), matStone);
+    ped.position.copy(P(D / 2 + 0.04, 0.475));
+    ped.rotation.y = face;
+    g.add(ped);
+    const cap = new THREE.Mesh(new THREE.BoxGeometry(1.05, 0.06, 0.64),
+      new THREE.MeshStandardMaterial({ color: 0x2b2621, roughness: .7 }));
+    cap.position.copy(P(D / 2 + 0.04, 0.98));
+    cap.rotation.y = face;
+    g.add(cap);
+    standY = 1.01;
+  }
 
-  /* vật phẩm — dựng đúng kích thước thật, đặt trên mặt bệ */
+  /* vật phẩm — giữ nguyên tỉ lệ thật, đáy đặt đúng mặt đứng */
   const built = buildArtifact(artId);
+  let groundY = null;
   if (built) {
     const holder = new THREE.Group();
     holder.add(built.group);
-    const h = built.group.userData.height || 1.2;
-    built.group.scale.setScalar(Math.min(1, 1.3 / h));
-    holder.position.copy(P(D / 2 + 0.04, 1.01));
+    const bb = new THREE.Box3().setFromObject(built.group);
+    const h = bb.max.y - bb.min.y;
+    const sc = Math.min(1, (onFloor ? H - 0.3 : 1.3) / h);
+    built.group.scale.setScalar(sc);
+    built.group.position.y = -bb.min.y * sc;        // đáy về 0
+    holder.position.copy(P(D / 2 + (onFloor ? 0 : 0.04), standY));
     holder.rotation.y = face;
     g.add(holder);
+    if (built.group.userData.groundLine) groundY = standY + (-bb.min.y) * sc;
 
     const sh = contactShadow();
-    sh.position.copy(P(D / 2 + 0.04, 1.014));
+    sh.scale.setScalar(onFloor ? 1.5 : 1);
+    sh.position.copy(P(D / 2 + (onFloor ? 0 : 0.04), standY + 0.004));
     g.add(sh);
   }
 
-  /* bảng tên nghiêng trước tủ */
+  /* vạch cốt đất cho hiện vật có phần chôn dưới đất */
+  if (groundY != null) {
+    const soil = new THREE.Mesh(new THREE.PlaneGeometry(W - 0.3, D - 0.24),
+      new THREE.MeshBasicMaterial({
+        color: 0x7a6340, transparent: true, opacity: 0.22, depthWrite: false, side: THREE.DoubleSide
+      }));
+    soil.rotation.set(-Math.PI / 2, 0, 0);
+    soil.position.copy(P(D / 2, groundY));
+    g.add(soil);
+    const tag = groundTag();
+    tag.position.copy(P(D - 0.06, groundY + 0.055, -(W / 2) + 0.3));
+    tag.rotation.y = face;
+    g.add(tag);
+  }
+
+  /* bảng tên: trên vách tủ nếu hiện vật đứng sàn, trước bệ nếu đặt trên bệ */
   const plate = exhibitPlate(art, accent);
-  plate.position.copy(P(D / 2 + 0.33, 0.6));
-  plate.rotation.y = face;
+  if (onFloor) { plate.position.copy(P(0.06, H - 0.42)); plate.rotation.y = face; }
+  else { plate.position.copy(P(D / 2 + 0.33, 0.6)); plate.rotation.y = face; }
   g.add(plate);
 
   /* đèn rọi trong tủ */
   const spot = new THREE.PointLight(
-    new THREE.Color(accent).lerp(new THREE.Color(0xffffff), .75), 4.5, 6, 2);
+    new THREE.Color(accent).lerp(new THREE.Color(0xffffff), .8), onFloor ? 15 : 6, 8, 2);
   spot.position.copy(P(D / 2, H - 0.35));
   g.add(spot);
 

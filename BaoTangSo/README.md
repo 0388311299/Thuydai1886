@@ -2,6 +2,12 @@
 
 Bản dựng sơ bộ: người xem đi bộ bằng góc nhìn thứ nhất trong một không gian trưng bày
 gồm **tiền sảnh tròn + 5 gian theo 5 thời kỳ**, mỗi gian có 6 ô trưng bày.
+
+Hai hiện vật đầu tiên nằm ở **gian V (2000 – nay)** vì cả hai đều là thiết bị đang lưu hành:
+**trụ nước uống tại vòi SAWACO** và **trụ chữa cháy Thảo Tín Vũ DN100**. Hình học của chúng
+dựng lại từ chính hồ sơ Blender trong kho này (`Tru_nuoc_tai_voi_20261016/build_fountain.py`
+và `Tru_Thao_Tin_Vu/dung_tru_DN100.py`), giữ nguyên số đo gốc; mỗi cấu kiện ghi rõ số đo đến
+từ catalogue, bản vẽ phê duyệt, website hãng hay chỉ là ước lượng theo ảnh (dấu ≈ trong danh sách).
 Nhìn vào một vật phẩm rồi nhấn `E` → vật phẩm xoay chậm trên bàn xoay, có thể
 **tách rời từng cấu kiện** và đọc vật liệu – chức năng – ghi chú của từng cấu kiện.
 
@@ -82,6 +88,11 @@ BaoTangSo/
 4. **Đặt vào ô trưng bày**: thêm id vào mảng `slots` của thời kỳ tương ứng trong `PERIODS`
    (6 ô mỗi gian, thứ tự: trái–gần cửa, phải–gần cửa, trái–trong, phải–trong, sau–trái, sau–phải).
 
+Hai tuỳ chọn hay dùng trong mục `ARTIFACTS`: `mount: 'san'` cho hiện vật có cả phần móng —
+tủ trưng bày tự sâu thêm, hiện vật đứng thẳng trên sàn tủ thay vì trên bệ; và
+`root.userData.groundLine = true` trong builder để tủ vẽ thêm vạch **cốt đất** cho phần chôn ngầm.
+Trường `src` của mỗi cấu kiện (`cat`, `pdf`, `web`, `nguon`, `uoc`) quyết định nhãn nguồn số đo.
+
 Muốn thêm/bớt thời kỳ thì thêm phần tử vào `PERIODS` — số gian, số cửa và vách tiền sảnh
 tự chia lại theo số thời kỳ.
 
@@ -113,11 +124,12 @@ Muốn thật hơn nữa thì theo thứ tự hiệu quả giảm dần:
 
 ## Còn phải làm
 
-- **Thay nội dung tạm**: hai vật phẩm hiện có mang nhãn “Dữ liệu tạm”, mô tả dựng theo
-  cấu tạo chung chứ chưa theo hồ sơ hiện vật thật. Số đo, niên đại, xuất xứ cần thay
-  bằng tài liệu của bạn.
-- Hình học vật phẩm đang dựng bằng khối cơ bản. Khi có bản quét 3D hoặc mô hình Blender
-  của hiện vật thật, thay builder bằng một file `.glb` mỗi vật phẩm, giữ nguyên quy ước
-  đặt tên cấu kiện để phần tách rời và bảng chữ chạy y nguyên.
+- **Bốn gian đầu còn trống.** Gian I–IV chờ hiện vật của từng thời kỳ; mỗi ô trống hiện
+  bảng “chờ hiện vật”.
+- **Chưa nạp thẳng từ `.blend`.** Hình học hiện được chép tay từ mã dựng Blender. Khi nào
+  tiện, xuất `.glb` từ hai file `.blend` rồi nạp bằng `GLTFLoader`, giữ nguyên tên cấu kiện
+  là phần tách rời và bảng chữ chạy y nguyên — lúc đó sửa mô hình chỉ cần sửa trong Blender.
+- **Chưa dựng cơ cấu van bên trong trụ chữa cháy** (hồ sơ gốc cũng chưa có), và các chi tiết
+  đánh dấu ≈ vẫn là ước lượng theo ảnh, không dùng để chế tạo.
 - Chưa có: âm thanh nền, bản dịch tiếng Anh, chế độ xem trên kính VR, ảnh tư liệu kèm
   theo từng vật phẩm.
